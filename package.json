@@ -19,7 +19,7 @@
     "lint:css": "csslint css/main.css --ignore=compatible-vendor-prefixes,outline-none,box-sizing,fallback-colors,universal-selector,unqualified-attributes,overqualified-elements",
     "build:html": "pug index.pug -o _site/",
     "watch:html": "npm run build:html && watch -p '**/*.pug' -c 'npm run build:html'",
-    "browser-sync": "browser-sync start --files 'js/main.js, index.html, css/*.css' --server ./_site/",
+    "browser-sync": "browser-sync start --files '_site/js/main.js, _site/index.html, _site/css/*.css' --server ./_site/",
     "build:watch": "npm run watch:css & npm run watch:js & npm run watch:html & npm run browser-sync",
     "build": "npm run build:js && npm run build:css && npm run build:html",
     "start": "npm run build:watch",
