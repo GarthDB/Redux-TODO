@@ -17,7 +17,7 @@ p {
   align-items: center;
   align-content: flex-end;
   min-height: 100vh;
-  max-width: 720px;
+  max-width: 730px;
   width: 100%;
   position: relative;
   margin: 0 auto;
@@ -88,6 +88,8 @@ p {
   padding: 0;
   width: 100%;
   cursor: pointer;
+}
+.todo-list span {
   display: flex;
   flex-direction: column-reverse;
 }
@@ -218,15 +220,18 @@ p {
 .filters > *:nth-child(4)[href]::before {
   background: rgba(236,240,241,0.3);
 }
-@media only screen and (min-device-width : 730px) {
+@media only screen and (min-width : 730px) {
   .root{
     justify-content: flex-end;
+    max-width: 720px;
   }
   .app {
     border-radius: 4px 4px 0 0;
   }
   .todo-list {
     order: -1;
+  }
+  .todo-list span {
     flex-direction: column;
   }
   .todo-list li {
