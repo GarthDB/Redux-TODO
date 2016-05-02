@@ -1,3 +1,5 @@
+const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 const todo = (state, action) => {
   switch (action.type) {
     case 'ADD_TODO':
@@ -152,28 +154,34 @@ const Todo = ({
     onClick={onClick}
     className={
       completed ?
-        'completed' :
-        'active'
+        'todo-item-completed' :
+        'todo-item-active'
     }
   >
     {text}
   </li>
 );
 
-const TodoList = ({
-  todos,
-  onTodoClick
-}) => (
-  <ul className="todo-list">
-    {todos.map(todo =>
-      <Todo
-        key={todo.id}
-        {...todo}
-        onClick={() => onTodoClick(todo.id)}
-      />
-    )}
-  </ul>
-);
+class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <ul className="todo-list">
+        <ReactCSSTransitionGroup transitionName="todo-transition" transitionEnterTimeout={50} transitionLeaveTimeout={50}>
+          {this.props.todos.map(todo =>
+            <Todo
+              key={todo.id}
+              {...todo}
+              onClick={() => this.props.onTodoClick(todo.id)}
+            />
+          )}
+        </ReactCSSTransitionGroup>
+      </ul>
+    )
+  }
+}
 
 let AddTodo = ({ dispatch }) => {
   let input;
