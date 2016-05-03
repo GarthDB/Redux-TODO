@@ -76,7 +76,7 @@ body {
   cursor: pointer;
   background-repeat: no-repeat;
   background-position: 28px 16px;
-  background-image: url('/img/add.svg');
+  background-image: url('../img/add.svg');
 }
 .add-todo__button:focus {
   outline: none;
@@ -155,11 +155,11 @@ body {
   position: relative;
   background-repeat: no-repeat;
   background-position: 28px 16px;
-  background-image: url('/img/box.svg');
+  background-image: url('../img/box.svg');
 }
 .todo-list__item--completed {
   color: #16a085;
-  background-image: url('/img/done.svg');
+  background-image: url('../img/done.svg');
 }
 .todo-transition-enter {
   height: 0;
