@@ -17,7 +17,7 @@
     "build:js": "babel js/source.js -o ./_site/js/main.js",
     "build:css": "postcss css/source.css -o _site/css/main.css --use autoprefixer",
     "watch:css": "npm run build:css && watch -p 'css/source.css' -c 'npm run build:css'",
-    "lint:css": "csslint css/main.css --ignore=compatible-vendor-prefixes,outline-none,box-sizing,fallback-colors,universal-selector,unqualified-attributes,overqualified-elements",
+    "lint:css": "csslint css/source.css --ignore=compatible-vendor-prefixes,outline-none,box-sizing,fallback-colors,unqualified-attributes,regex-selectors,adjoining-classes",
     "build:html": "pug index.pug -o _site/",
     "watch:html": "npm run build:html && watch -p '**/*.pug' -c 'npm run build:html'",
     "browser-sync": "browser-sync start --files '_site/js/main.js, _site/index.html, _site/css/*.css' --server ./_site/",
