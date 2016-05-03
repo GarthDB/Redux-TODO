@@ -162,7 +162,7 @@ body {
 [class^="filters__list-link"]::before,
 [class^="filters__list-link--all"]::after {
   content: '';
-  top: 3px;
+  top: 5px;
   width: 10px;
   height: 10px;
   border-radius: 5px;
