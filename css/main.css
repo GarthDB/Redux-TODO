@@ -225,7 +225,7 @@ body {
   position: absolute;
   box-shadow: 0 0 2px 1px rgba(0,0,0,0.2);
   background: #647380;
-  left: 0px;
+  left: 0;
 }
 [class^="filters__list-link--all"] {
   padding-left: 21px;
