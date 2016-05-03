@@ -46,6 +46,10 @@ var todos = function todos() {
       return state.map(function (t) {
         return todo(t, action);
       });
+    case 'REMOVE_TODO':
+      return state.filter(function (item) {
+        return item.id !== action.id;
+      });
     default:
       return state;
   }
@@ -73,16 +77,27 @@ var todoApp = combineReducers({
 
 var nextTodoId = 0;
 var addTodo = function addTodo(text) {
-  return {
-    type: 'ADD_TODO',
-    id: nextTodoId++,
-    text: text
-  };
+  if (text != '') {
+    return {
+      type: 'ADD_TODO',
+      id: nextTodoId++,
+      text: text
+    };
+  } else {
+    return false;
+  }
 };
 
 var toggleTodo = function toggleTodo(id) {
   return {
     type: 'TOGGLE_TODO',
+    id: id
+  };
+};
+
+var removeTodo = function removeTodo(id) {
+  return {
+    type: 'REMOVE_TODO',
     id: id
   };
 };
@@ -105,24 +120,33 @@ var Link = function Link(_ref) {
   var active = _ref.active;
   var children = _ref.children;
   var _onClick = _ref.onClick;
+  var className = _ref.className;
 
   if (active) {
     return React.createElement(
-      'span',
-      null,
-      children
+      'li',
+      { className: 'filters__list-item' },
+      React.createElement(
+        'span',
+        { className: className + "--selected" },
+        children
+      )
     );
   }
 
   return React.createElement(
-    'a',
-    { href: '#',
-      onClick: function onClick(e) {
-        e.preventDefault();
-        _onClick();
-      }
-    },
-    children
+    'li',
+    { className: 'filters__list-item' },
+    React.createElement(
+      'a',
+      { href: '#', className: className,
+        onClick: function onClick(e) {
+          e.preventDefault();
+          _onClick();
+        }
+      },
+      children
+    )
   );
 };
 
@@ -142,27 +166,31 @@ var FilterLink = connect(mapStateToLinkProps, mapDispatchToLinkProps)(Link);
 
 var Footer = function Footer() {
   return React.createElement(
-    'p',
+    'div',
     { className: 'filters' },
     React.createElement(
       'span',
-      null,
+      { className: 'filters__label' },
       'Show:'
     ),
     React.createElement(
-      FilterLink,
-      { filter: 'SHOW_ALL' },
-      'All'
-    ),
-    React.createElement(
-      FilterLink,
-      { filter: 'SHOW_ACTIVE' },
-      'Active'
-    ),
-    React.createElement(
-      FilterLink,
-      { filter: 'SHOW_COMPLETED' },
-      'Completed'
+      'ul',
+      { className: 'filters__list' },
+      React.createElement(
+        FilterLink,
+        { className: 'filters__list-link--all', filter: 'SHOW_ALL' },
+        'All'
+      ),
+      React.createElement(
+        FilterLink,
+        { className: 'filters__list-link--active', filter: 'SHOW_ACTIVE' },
+        'Active'
+      ),
+      React.createElement(
+        FilterLink,
+        { className: 'filters__list-link--completed', filter: 'SHOW_COMPLETED' },
+        'Completed'
+      )
     )
   );
 };
@@ -175,7 +203,7 @@ var Todo = function Todo(_ref2) {
     'li',
     {
       onClick: onClick,
-      className: completed ? 'todo-item-completed' : 'todo-item-active'
+      className: completed ? 'todo-list__item--completed' : 'todo-list__item--active'
     },
     text
   );
@@ -196,21 +224,23 @@ var TodoList = function (_React$Component) {
       var _this2 = this;
 
       return React.createElement(
-        'ul',
-        { className: 'todo-list' },
-        React.createElement(
-          ReactCSSTransitionGroup,
-          { transitionName: 'todo-transition', transitionEnterTimeout: 50, transitionLeaveTimeout: 50 },
-          this.props.todos.map(function (todo) {
-            return React.createElement(Todo, _extends({
-              key: todo.id
-            }, todo, {
-              onClick: function onClick() {
-                return _this2.props.onTodoClick(todo.id);
-              }
-            }));
-          })
-        )
+        ReactCSSTransitionGroup,
+        {
+          component: 'ul',
+          className: 'todo-list',
+          transitionName: 'todo-transition',
+          transitionEnterTimeout: 70,
+          transitionLeaveTimeout: 70
+        },
+        this.props.todos.map(function (todo) {
+          return React.createElement(Todo, _extends({
+            key: todo.id
+          }, todo, {
+            onClick: function onClick() {
+              return _this2.props.onTodoClick(todo.id);
+            }
+          }));
+        })
       );
     }
   }]);
@@ -226,7 +256,8 @@ var AddTodo = function AddTodo(_ref3) {
   return React.createElement(
     'div',
     { className: 'add-todo' },
-    React.createElement('input', { placeholder: 'New Todo', ref: function ref(node) {
+    React.createElement('input', { className: 'add-todo__input',
+      placeholder: 'New Todo', ref: function ref(node) {
         input = node;
       }, onKeyUp: function onKeyUp(e) {
         if (e.keyCode == 13) {
@@ -236,7 +267,7 @@ var AddTodo = function AddTodo(_ref3) {
       } }),
     React.createElement(
       'button',
-      { onClick: function onClick() {
+      { className: 'add-todo__button', onClick: function onClick() {
           dispatch(addTodo(input.value));
           input.value = '';
         } },
@@ -292,6 +323,7 @@ var createStore = _Redux2.createStore;
 var todoAppStore = Redux.createStore(todoApp);
 todoAppStore.dispatch(addTodo('New TODO'));
 todoAppStore.dispatch(addTodo('Even newer TODO'));
+todoAppStore.dispatch(addTodo('One more TODO'));
 todoAppStore.dispatch(toggleTodo(0));
 
 ReactDOM.render(React.createElement(

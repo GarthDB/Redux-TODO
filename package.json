@@ -3,30 +3,30 @@
   "version": "0.1.0",
   "license": "Apache-2.0",
   "author": {
-    "name" : "Garth Braithwaite",
-    "url" : "http://garthdb.com/"
+    "name": "Garth Braithwaite",
+    "url": "http://garthdb.com/"
   },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/GarthDB/Redux-TODO.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GarthDB/Redux-TODO.git"
   },
   "scripts": {
+    "watch:svg": "npm run build:svg && watch -p 'img/*.svg' -c 'npm run build:svg'",
+    "build:svg": "svgo -f ./img -o _site/img",
     "watch:js": "npm run build:js && watch -p 'js/source.js' -c 'npm run build:js'",
     "build:js": "babel js/source.js -o ./_site/js/main.js",
-    "build:css": "postcss css/source.css -o _site/css/main.css --use autoprefixer",
+    "build:css": "postcss css/source.css -o _site/css/main.css --use postcss-cssnext",
     "watch:css": "npm run build:css && watch -p 'css/source.css' -c 'npm run build:css'",
     "lint:css": "csslint css/main.css --ignore=compatible-vendor-prefixes,outline-none,box-sizing,fallback-colors,universal-selector,unqualified-attributes,overqualified-elements",
     "build:html": "pug index.pug -o _site/",
     "watch:html": "npm run build:html && watch -p '**/*.pug' -c 'npm run build:html'",
     "browser-sync": "browser-sync start --files '_site/js/main.js, _site/index.html, _site/css/*.css' --server ./_site/",
-    "build:watch": "npm run watch:css & npm run watch:js & npm run watch:html & npm run browser-sync",
-    "build": "npm run build:js && npm run build:css && npm run build:html",
+    "build:watch": "npm run watch:css & npm run watch:js & npm run watch:html & npm run watch:svg & npm run browser-sync",
+    "build": "npm run build:js && npm run build:css && npm run build:html && npm run build:svg",
     "start": "npm run build:watch",
     "deploy": "git subtree push --prefix _site origin gh-pages"
   },
   "devDependencies": {
-    "autoprefixer": "^6.3.6",
     "babel-cli": "^6.7.7",
     "babel-plugin-syntax-object-rest-spread": "^6.5.0",
     "babel-plugin-transform-object-rest-spread": "^6.6.5",
@@ -36,6 +36,7 @@
     "csslint": "^0.10.0",
     "postcss-cli": "^2.5.2",
     "pug-cli": "1.0.0-alpha1",
+    "svgo": "^0.6.6",
     "watch-cli": "^0.2.1"
   }
 }

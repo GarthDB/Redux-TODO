@@ -33,6 +33,8 @@ const todos = (state = [], action) => {
       return state.map(t =>
         todo(t, action)
       );
+    case 'REMOVE_TODO':
+      return state.filter(item => item.id !== action.id)
     default:
       return state;
   }
@@ -58,16 +60,27 @@ const todoApp = combineReducers({
 
 let nextTodoId = 0;
 const addTodo = (text) => {
-  return {
-    type: 'ADD_TODO',
-    id: nextTodoId++,
-    text
-  };
+  if(text != '') {
+    return {
+      type: 'ADD_TODO',
+      id: nextTodoId++,
+      text
+    };
+  } else {
+    return false;
+  }
 };
 
 const toggleTodo = (id) => {
   return {
     type: 'TOGGLE_TODO',
+    id
+  };
+};
+
+const removeTodo = (id) => {
+  return {
+    type: 'REMOVE_TODO',
     id
   };
 };
@@ -85,21 +98,28 @@ const { Provider, connect } = ReactRedux;
 const Link = ({
   active,
   children,
-  onClick
+  onClick,
+  className
 }) => {
   if (active) {
-    return <span>{children}</span>;
+    return (
+      <li className="filters__list-item">
+        <span className={className + "--selected"}>{children}</span>
+      </li>
+    );
   }
 
   return (
-    <a href='#'
-       onClick={e => {
-         e.preventDefault();
-         onClick();
-       }}
-    >
-      {children}
-    </a>
+    <li className="filters__list-item">
+      <a href='#' className={className}
+         onClick={e => {
+           e.preventDefault();
+           onClick();
+         }}
+      >
+        {children}
+      </a>
+    </li>
   );
 };
 
@@ -131,18 +151,14 @@ const FilterLink = connect(
 )(Link);
 
 const Footer = () => (
-  <p className="filters">
-    <span>Show:</span>
-    <FilterLink filter='SHOW_ALL'>
-      All
-    </FilterLink>
-    <FilterLink filter='SHOW_ACTIVE'>
-      Active
-    </FilterLink>
-    <FilterLink filter='SHOW_COMPLETED'>
-      Completed
-    </FilterLink>
-  </p>
+  <div className="filters">
+    <span className="filters__label">Show:</span>
+    <ul className="filters__list">
+      <FilterLink className="filters__list-link--all" filter='SHOW_ALL'>All</FilterLink>
+      <FilterLink className="filters__list-link--active" filter='SHOW_ACTIVE'>Active</FilterLink>
+      <FilterLink className="filters__list-link--completed" filter='SHOW_COMPLETED'>Completed</FilterLink>
+    </ul>
+  </div>
 );
 
 const Todo = ({
@@ -154,8 +170,8 @@ const Todo = ({
     onClick={onClick}
     className={
       completed ?
-        'todo-item-completed' :
-        'todo-item-active'
+        'todo-list__item--completed' :
+        'todo-list__item--active'
     }
   >
     {text}
@@ -168,17 +184,21 @@ class TodoList extends React.Component {
   }
   render() {
     return (
-      <ul className="todo-list">
-        <ReactCSSTransitionGroup transitionName="todo-transition" transitionEnterTimeout={50} transitionLeaveTimeout={50}>
-          {this.props.todos.map(todo =>
-            <Todo
-              key={todo.id}
-              {...todo}
-              onClick={() => this.props.onTodoClick(todo.id)}
-            />
-          )}
-        </ReactCSSTransitionGroup>
-      </ul>
+      <ReactCSSTransitionGroup
+        component="ul"
+        className="todo-list"
+        transitionName="todo-transition"
+        transitionEnterTimeout={70}
+        transitionLeaveTimeout={70}
+      >
+        {this.props.todos.map(todo =>
+          <Todo
+            key={todo.id}
+            {...todo}
+            onClick={() => this.props.onTodoClick(todo.id)}
+          />
+        )}
+      </ReactCSSTransitionGroup>
     )
   }
 }
@@ -188,7 +208,8 @@ let AddTodo = ({ dispatch }) => {
 
   return (
     <div className="add-todo">
-      <input placeholder="New Todo" ref={node => {
+      <input className="add-todo__input"
+      placeholder="New Todo" ref={node => {
         input = node;
       }} onKeyUp={(e) => {
         if (e.keyCode == 13) {
@@ -196,7 +217,7 @@ let AddTodo = ({ dispatch }) => {
           input.value = '';
         }
       }} />
-      <button onClick={() => {
+      <button className="add-todo__button" onClick={() => {
         dispatch(addTodo(input.value));
         input.value = '';
       }}>
@@ -262,7 +283,9 @@ const { createStore } = Redux;
 const todoAppStore = Redux.createStore(todoApp);
 todoAppStore.dispatch(addTodo('New TODO'));
 todoAppStore.dispatch(addTodo('Even newer TODO'));
+todoAppStore.dispatch(addTodo('One more TODO'));
 todoAppStore.dispatch(toggleTodo(0));
+
 
 
 ReactDOM.render(
