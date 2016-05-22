@@ -136,14 +136,6 @@ body {
   width: calc(100% + 20px);
   font-weight: 700;
 }
-.filters a {
-  text-decoration: none;
-  color: rgba(236,240,241,0.3);
-}
-.filters a:hover {
-  text-decoration: none;
-  color: #ccc;
-}
 .filters__list {
   display: inline-block;
   list-style: none;
@@ -158,6 +150,12 @@ body {
   display: block;
   position: relative;
   padding-left: 16px;
+  text-decoration: none;
+  color: rgba(236,240,241,0.3);
+}
+[class^="filters__list-link"]:hover {
+  text-decoration: none;
+  color: #ccc;
 }
 [class^="filters__list-link"]::before,
 [class^="filters__list-link--all"]::after {
