@@ -116,35 +116,25 @@ var Provider = _ReactRedux.Provider;
 var connect = _ReactRedux.connect;
 
 
-var Link = function Link(_ref) {
+var Radio = function Radio(_ref) {
   var active = _ref.active;
   var children = _ref.children;
-  var _onClick = _ref.onClick;
-  var className = _ref.className;
-
-  if (active) {
-    return React.createElement(
-      'li',
-      { className: 'filters__list-item' },
-      React.createElement(
-        'span',
-        { className: className + "--selected" },
-        children
-      )
-    );
-  }
+  var _onChange = _ref.onChange;
 
   return React.createElement(
-    'li',
-    { className: 'filters__list-item' },
+    'label',
+    { className: 'filter' },
+    React.createElement('input', { checked: active,
+      type: 'radio',
+      name: 'filter',
+      className: 'filter__radio',
+      onChange: function onChange(e) {
+        _onChange();
+      }
+    }),
     React.createElement(
-      'a',
-      { href: '#', className: className,
-        onClick: function onClick(e) {
-          e.preventDefault();
-          _onClick();
-        }
-      },
+      'span',
+      { className: 'filter__label--' + children.toLowerCase() },
       children
     )
   );
@@ -157,40 +147,36 @@ var mapStateToLinkProps = function mapStateToLinkProps(state, ownProps) {
 };
 var mapDispatchToLinkProps = function mapDispatchToLinkProps(dispatch, ownProps) {
   return {
-    onClick: function onClick() {
+    onChange: function onChange() {
       dispatch(setVisibilityFilter(ownProps.filter));
     }
   };
 };
-var FilterLink = connect(mapStateToLinkProps, mapDispatchToLinkProps)(Link);
+var FilterRadio = connect(mapStateToLinkProps, mapDispatchToLinkProps)(Radio);
 
 var Footer = function Footer() {
   return React.createElement(
-    'div',
+    'fieldset',
     { className: 'filters' },
     React.createElement(
-      'span',
-      { className: 'filters__label' },
+      'legend',
+      { className: 'filters__title' },
       'Show:'
     ),
     React.createElement(
-      'ul',
-      { className: 'filters__list' },
-      React.createElement(
-        FilterLink,
-        { className: 'filters__list-link--all', filter: 'SHOW_ALL' },
-        'All'
-      ),
-      React.createElement(
-        FilterLink,
-        { className: 'filters__list-link--active', filter: 'SHOW_ACTIVE' },
-        'Active'
-      ),
-      React.createElement(
-        FilterLink,
-        { className: 'filters__list-link--completed', filter: 'SHOW_COMPLETED' },
-        'Completed'
-      )
+      FilterRadio,
+      { filter: 'SHOW_ALL' },
+      'All'
+    ),
+    React.createElement(
+      FilterRadio,
+      { filter: 'SHOW_ACTIVE' },
+      'Active'
+    ),
+    React.createElement(
+      FilterRadio,
+      { filter: 'SHOW_COMPLETED' },
+      'Completed'
     )
   );
 };

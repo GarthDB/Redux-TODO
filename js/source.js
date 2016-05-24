@@ -95,31 +95,23 @@ const setVisibilityFilter = (filter) => {
 const { Component } = React;
 const { Provider, connect } = ReactRedux;
 
-const Link = ({
+const Radio = ({
   active,
   children,
-  onClick,
-  className
+  onChange
 }) => {
-  if (active) {
-    return (
-      <li className="filters__list-item">
-        <span className={className + "--selected"}>{children}</span>
-      </li>
-    );
-  }
-
   return (
-    <li className="filters__list-item">
-      <a href='#' className={className}
-         onClick={e => {
-           e.preventDefault();
-           onClick();
-         }}
-      >
-        {children}
-      </a>
-    </li>
+    <label className="filter">
+      <input checked={active}
+        type="radio"
+        name="filter"
+        className="filter__radio"
+        onChange={e => {
+          onChange();
+        }}
+      />
+      <span className={`filter__label--${children.toLowerCase()}`}>{children}</span>
+    </label>
   );
 };
 
@@ -138,27 +130,25 @@ const mapDispatchToLinkProps = (
   ownProps
 ) => {
   return {
-    onClick: () => {
+    onChange: () => {
       dispatch(
         setVisibilityFilter(ownProps.filter)
       );
     }
   };
 }
-const FilterLink = connect(
+const FilterRadio = connect(
   mapStateToLinkProps,
   mapDispatchToLinkProps
-)(Link);
+)(Radio);
 
 const Footer = () => (
-  <div className="filters">
-    <span className="filters__label">Show:</span>
-    <ul className="filters__list">
-      <FilterLink className="filters__list-link--all" filter='SHOW_ALL'>All</FilterLink>
-      <FilterLink className="filters__list-link--active" filter='SHOW_ACTIVE'>Active</FilterLink>
-      <FilterLink className="filters__list-link--completed" filter='SHOW_COMPLETED'>Completed</FilterLink>
-    </ul>
-  </div>
+  <fieldset className="filters">
+    <legend  className="filters__title">Show:</legend>
+    <FilterRadio filter='SHOW_ALL'>All</FilterRadio>
+    <FilterRadio filter='SHOW_ACTIVE'>Active</FilterRadio>
+    <FilterRadio filter='SHOW_COMPLETED'>Completed</FilterRadio>
+  </fieldset>
 );
 
 const Todo = ({

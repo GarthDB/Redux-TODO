@@ -24,7 +24,8 @@
     "build:watch": "npm run watch:css & npm run watch:js & npm run watch:html & npm run watch:svg & npm run browser-sync",
     "build": "npm run build:js && npm run build:css && npm run build:html && npm run build:svg",
     "start": "npm run build:watch",
-    "deploy": "git subtree push --prefix _site origin gh-pages"
+    "deploy": "git subtree push --prefix _site origin gh-pages",
+    "deploy-force": "git push origin `git subtree split --prefix _site master`:gh-pages --force"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
