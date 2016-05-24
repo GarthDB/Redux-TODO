@@ -10,21 +10,17 @@ body {
 }
 .container {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-align-content: flex-end;
-      -ms-flex-line-pack: end;
-          align-content: flex-end;
+  -ms-flex-line-pack: end;
+      align-content: flex-end;
   min-height: 100vh;
   max-width: 730px;
   width: 100%;
@@ -34,20 +30,16 @@ body {
 }
 .app {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
       -ms-flex-pack: end;
           justify-content: flex-end;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   background: #ecf0f1;
@@ -131,12 +123,10 @@ body {
 }
 .todo-list {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: reverse;
-  -webkit-flex-direction: column-reverse;
       -ms-flex-direction: column-reverse;
           flex-direction: column-reverse;
 }
@@ -179,7 +169,6 @@ body {
 
 .filters {
   -webkit-box-ordinal-group: 0;
-  -webkit-order: -1;
       -ms-flex-order: -1;
           order: -1;
   background: #2c3e50;
@@ -190,32 +179,34 @@ body {
   padding: 32px 35px 0;
   width: calc(100% + 20px);
   font-weight: 700;
+  border: 0;
 }
-.filters a {
-  text-decoration: none;
-  color: rgba(236,240,241,0.3);
-}
-.filters a:hover {
-  text-decoration: none;
-  color: #ccc;
-}
-.filters__list {
-  display: inline-block;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.filters__label, .filters__list-item {
+.filters__title, .filter {
   display: inline-block;
   margin-right: 30px;
 }
-[class^="filters__list-link"] {
-  display: block;
-  position: relative;
-  padding-left: 16px;
+.filter__label{
+  cursor: pointer;
 }
-[class^="filters__list-link"]::before,
-[class^="filters__list-link--all"]::after {
+[class^="filter__label"] {
+  position: relative;
+  display: inline-block;
+  padding-left: 16px;
+  color: rgba(236,240,241,0.3);
+}
+[class^="filter__label"]:hover {
+  color: #ccc;
+}
+.filter__radio {
+  position: absolute;
+  opacity: 0;
+}
+.filter__radio:checked + [class^="filter__label"] {
+  color: #fff;
+}
+
+[class^="filter__label"]::before,
+.filter__label--all::after {
   content: '';
   top: 5px;
   width: 10px;
@@ -227,31 +218,30 @@ body {
   background: #647380;
   left: 0;
 }
-[class^="filters__list-link--all"] {
+.filter__label--all {
   padding-left: 21px;
 }
-[class^="filters__list-link--all"]::before {
+.filter__label--all::after {
   left: 5px;
 }
-.filters__list-link--all--selected::before {
+.filter__radio:checked + .filter__label--all::before {
   background: #af544f;
 }
-.filters__list-link--all--selected::after {
+.filter__radio:checked + .filter__label--all::after {
   background: #16a085;
 }
 
-.filters__list-link--active--selected::before {
+.filter__radio:checked + .filter__label--active::before {
   background: #af544f;
 }
 
-.filters__list-link--completed--selected::before {
+.filter__radio:checked + .filter__label--completed::before {
   background: #16a085;
 }
 
 @media only screen and (min-width : 730px) {
   .container {
     -webkit-box-pack: end;
-    -webkit-justify-content: flex-end;
         -ms-flex-pack: end;
             justify-content: flex-end;
     max-width: 720px;
@@ -261,14 +251,12 @@ body {
   }
   .todo-list {
     -webkit-box-ordinal-group: 0;
-    -webkit-order: -1;
         -ms-flex-order: -1;
             order: -1;
   }
   .todo-list {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
   }
@@ -277,7 +265,6 @@ body {
   }
   .filters {
     -webkit-box-ordinal-group: 1;
-    -webkit-order: 0;
         -ms-flex-order: 0;
             order: 0;
     border-radius: 3px 3px 0 0;
